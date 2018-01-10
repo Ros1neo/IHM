@@ -84,16 +84,20 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         _gl.scene()->object(_gl._selected_id)->setTranslation(Translation3f(_gl.scene()->camera()->viewMatrix().linear().inverse()*Vector3f(1.0,0.0,0.0)));
         break;
     case (Qt::Key_Z):
-        _gl.scene()->object(_gl._selected_id)->setTranslation(Translation3f(_gl.scene()->camera()->viewMatrix().linear().inverse()*Vector3f(0.0,1.0,0.0)));
+        for (uint i = 0; i<_gl.scene()->n_object();i++)
+            _gl.scene()->object(i)->setTranslation(Translation3f(_gl.scene()->camera()->viewMatrix().linear().inverse()*Vector3f(0.0,0.0,1.0)));
         break;
     case (Qt::Key_S):
-        _gl.scene()->object(_gl._selected_id)->setTranslation(Translation3f(_gl.scene()->camera()->viewMatrix().linear().inverse()*Vector3f(0.0,-1.0,0.0)));
+        for (uint i = 0; i<_gl.scene()->n_object();i++)
+            _gl.scene()->object(i)->setTranslation(Translation3f(_gl.scene()->camera()->viewMatrix().linear().inverse()*Vector3f(0.0,0.0,-1.0)));
         break;
     case (Qt::Key_Q):
-        _gl.scene()->object(_gl._selected_id)->setTranslation(Translation3f(_gl.scene()->camera()->viewMatrix().linear().inverse()*Vector3f(-1.0,0.0,0.0)));
+        for (uint i = 0; i<_gl.scene()->n_object();i++)
+            _gl.scene()->object(i)->setTranslation(Translation3f(_gl.scene()->camera()->viewMatrix().linear().inverse()*Vector3f(1.0,0.0,0.0)));
         break;
     case (Qt::Key_D):
-        _gl.scene()->object(_gl._selected_id)->setTranslation(Translation3f(_gl.scene()->camera()->viewMatrix().linear().inverse()*Vector3f(1.0,0.0,0.0)));
+        for (uint i = 0; i<_gl.scene()->n_object();i++)
+            _gl.scene()->object(i)->setTranslation(Translation3f(_gl.scene()->camera()->viewMatrix().linear().inverse()*Vector3f(-1.0,0.0,0.0)));
         break;
     }
     _gl.update();
@@ -131,7 +135,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
     Rotation2D<float> rot2((float)3.141592/2);
     cout << "mouse move event : " << mouse_pos.x() << " " << (rot2*mouse_pos).x() << endl;
     cout << "mouse move event : " << mouse_pos.y() << " " << (rot2*mouse_pos).y() << endl;
-
+    _gl.scene()->camera()->setOrientation(Quaternionf(AngleAxisf((mouse_pos).x()*0.01,Vector3f(0.0,1.0,0.0))));
     _gl.scene()->object(_gl._selected_id)->setRotation(Affine3f(AngleAxis<float>(0.01,Vector3f((mouse_pos).x(),(mouse_pos).y(),0.0).normalized())));
     _gl.update();
 }
